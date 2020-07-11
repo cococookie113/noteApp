@@ -1,4 +1,4 @@
-node_modules/**/*
+node_modules/**
 !node_modules/react-native-prompt
 .expo/*
 npm-debug.*
