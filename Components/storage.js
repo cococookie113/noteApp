@@ -1,11 +1,9 @@
-import AsyncStorage from "@react-native-community/async-storage";
-import parseErrorStack from "react-native/Libraries/Core/Devtools/parseErrorStack";
+import * as SecureStore from "expo-secure-store";
 
 export const storeData = async (key, value) => {
   try {
-    await AsyncStorage.removeItem(key);
-    const jsonValue = JSON.stringify(value);
-    await AsyncStorage.setItem(key, jsonValue);
+    await SecureStore.setItemAsync(key, JSON.stringify(value));
+    // console.log("done");
   } catch (error) {
     console.log(error);
   }
@@ -13,10 +11,27 @@ export const storeData = async (key, value) => {
 
 export const getData = async (key) => {
   try {
-    const jsonValue = await AsyncStorage.getItem(key);
-
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
+    await SecureStore.getItemAsync(key).then((value) => {
+      jsonValue = value;
+    });
+    // console.log(JSON.parse(jsonValue));
+    return jsonValue ? JSON.parse(jsonValue) : null;
   } catch (error) {
     console.log(error);
   }
+};
+
+export const deleteFromNoteList = (word) => {
+  delete global.noteList[word];
+};
+
+export const addInNoteList = (word, details) => {
+  addNoteList(word, details);
+};
+
+const addNoteList = (word, details) => {
+  global.noteList[word] = {
+    word: word,
+    details: details,
+  };
 };

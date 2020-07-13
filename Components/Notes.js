@@ -7,51 +7,91 @@ import {
   Button,
   TouchableOpacity,
   KeyboardAvoidingView,
+  SafeAreaView,
+  ScrollView,
+  Alert,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Prompt from "react-native-prompt";
-import AsyncStorage from "@react-native-community/async-storage";
+import Draggable from "react-native-draggable";
 
-import makeNotes from "./makeNotes";
+import { makeArr } from "./makeNotes";
+import {
+  getData,
+  storeData,
+  addInNoteList,
+  deleteFromNoteList,
+} from "./storage";
 import Note from "./Note";
 
-global.noteList = new Map();
+global.noteList = {};
 global.color = "#30D0B7";
 
-const storeNoteList = async (value) => {
-  try {
-    const stringifiedNoteList = JSON.stringify(global.notelist);
-    await AsyncStorage.setItem();
-  } catch (error) {}
-};
+const NOTELIST_KEY = "_noteList";
+const COLOR_KEY = "_color";
 
 export default class Notes extends Component {
   constructor(props) {
     super(props);
     this.state = {
       promptVisible: false,
-      n: new Map(),
-      noteArr: [],
+
       noteList: global.noteList,
       renderedMap: global.notelist,
     };
-  }
-
-  UNSAFE_componentWillUpdate() {
-    console.log(global.noteList);
+    getData(NOTELIST_KEY)
+      .then((value) => {
+        if (value) {
+          global.noteList = value;
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   render() {
+    // console.log(global.noteList);
+
     return (
-      <View style={styles.mainContainer}>
+      <SafeAreaView style={styles.mainContainer}>
         <View style={styles.dropZone}>
           <Text style={styles.text}>Delete</Text>
         </View>
+        <View style={styles.noteContainer}>
+          {makeArr(global.noteList).map((note) => {
+            return (
+              <Draggable
+                key={note.word}
+                renderText={note.word}
+                renderSize={CIRCLE_RADIUS * 2}
+                renderColor={global.color}
+                onShortPressRelease={() => Alert.alert(note.word, note.details)}
+                x={Math.round(Window.width / 2)}
+                y={Math.round(Window.height / 2)}
+                isCircle
+                touchableOpacityProps={{ activeOpacity: 0.8 }}
+                onDragRelease={(e, gesture, bounds) => {
+                  // console.log(gesture.moveY);
+                  if (gesture.moveY < Window.height / 10 + CIRCLE_RADIUS / 3) {
+                    // console.log("hi");
+                    deleteFromNoteList(note.word);
+                    this.setState({});
+                  }
+                }}
+              />
+            );
+          })}
+        </View>
 
-        {this.state.noteArr.map((note) => {
-          return note;
-        })}
-
+        <TouchableOpacity
+          style={styles.refresh}
+          onPress={() => {
+            this.setState({});
+          }}
+        >
+          <Ionicons name="ios-refresh" style={styles.refreshText}></Ionicons>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.addNote}
           onPress={() => {
@@ -70,30 +110,44 @@ export default class Notes extends Component {
           onCancel={() => this.setState({ promptVisible: false })}
           onSubmit={(value, valueSecond) => {
             if (value !== "") {
-              global.noteList.set(
-                value,
-                new Map([
-                  ["word", value],
-
-                  ["details", valueSecond],
-                ])
-              );
-              this.state.noteArr = makeNotes(dropZoneHeight);
+              addInNoteList(value, valueSecond);
+              // global.noteList.set(
+              //   value,
+              //   new Map([
+              //     ["word", value],
+              //     ["details", valueSecond],
+              //   ])
+              // );
             }
+            storeData(NOTELIST_KEY, global.noteList).catch((err) => {
+              console.log(err);
+            });
             this.setState({ promptVisible: false });
           }}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }
 
 let Window = Dimensions.get("window");
-const dropZoneHeight = Window.height / 10;
+const CIRCLE_RADIUS = 46;
 let styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: "#f8f8f8",
+    width: Window.width,
+    height: Window.height,
+  },
+  draggableContainer: {
+    position: "absolute",
+    top: Window.height / 2 - CIRCLE_RADIUS,
+    left: Window.width / 2 - CIRCLE_RADIUS,
+  },
+  circle: {
+    width: CIRCLE_RADIUS * 2,
+    height: CIRCLE_RADIUS * 2,
+    borderRadius: CIRCLE_RADIUS,
   },
   dropZone: {
     flex: 0.12,
@@ -101,6 +155,10 @@ let styles = StyleSheet.create({
     justifyContent: "center",
     height: 100,
     backgroundColor: "#2c3e50",
+  },
+  noteContainer: {
+    width: Window.width,
+    height: Window.height,
   },
   text: {
     color: "#c1c1c1",
@@ -111,9 +169,9 @@ let styles = StyleSheet.create({
 
   addNote: {
     position: "absolute",
-    width: 76,
-    height: 76,
-    borderRadius: 38,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F8F8F8",
@@ -132,6 +190,31 @@ let styles = StyleSheet.create({
   },
   addText: {
     fontSize: 60,
+    color: "#30D0B7",
+  },
+  refresh: {
+    position: "absolute",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8F8F8",
+    right: 10,
+    //bottom: -1 * Window.height + Window.height / 6,
+    bottom: 70,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  refreshText: {
+    fontSize: 40,
     color: "#30D0B7",
   },
 });
