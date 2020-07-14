@@ -22,7 +22,6 @@ import {
   addInNoteList,
   deleteFromNoteList,
 } from "./storage";
-import Note from "./Note";
 
 global.noteList = {};
 global.color = "#30D0B7";
@@ -67,8 +66,8 @@ export default class Notes extends Component {
                 renderSize={CIRCLE_RADIUS * 2}
                 renderColor={global.color}
                 onShortPressRelease={() => Alert.alert(note.word, note.details)}
-                x={Math.round(Window.width / 2)}
-                y={Math.round(Window.height / 2)}
+                x={Math.round(Window.width / 2.5)}
+                y={Math.round(Window.height / 2.6)}
                 isCircle
                 touchableOpacityProps={{ activeOpacity: 0.8 }}
                 onDragRelease={(e, gesture, bounds) => {
@@ -87,6 +86,7 @@ export default class Notes extends Component {
         <TouchableOpacity
           style={styles.refresh}
           onPress={() => {
+            storeData(NOTELIST_KEY, global.noteList);
             this.setState({});
           }}
         >
@@ -135,7 +135,7 @@ const CIRCLE_RADIUS = 46;
 let styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: "#f8f8f8",
+
     width: Window.width,
     height: Window.height,
   },
@@ -153,10 +153,11 @@ let styles = StyleSheet.create({
     flex: 0.12,
     alignItems: "center",
     justifyContent: "center",
-    height: 100,
     backgroundColor: "#2c3e50",
   },
   noteContainer: {
+    flex: 0.88,
+    backgroundColor: "#f8f8f8",
     width: Window.width,
     height: Window.height,
   },
@@ -164,7 +165,7 @@ let styles = StyleSheet.create({
     color: "#c1c1c1",
     fontWeight: "bold",
     fontSize: 26,
-    top: 30,
+    top: 35,
   },
 
   addNote: {
