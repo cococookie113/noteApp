@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 
 import { storeData } from "./storage";
+import { Restart } from "fiction-expo-restart";
 
 const COLOR_KEY = "color";
 
@@ -20,6 +21,7 @@ export default function Color({ color }) {
       }}
       onPress={() => {
         changeColor(color);
+        Restart();
       }}
     />
   );
@@ -28,7 +30,7 @@ export default function Color({ color }) {
 function isSameWidthGlobalColor(color) {
   if (color === global.color) {
     return {
-      borderWidth: 2,
+      borderWidth: 5,
       borderColor: "#f8f8f8",
       shadowColor: "#000",
       shadowOffset: {

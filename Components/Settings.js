@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 //import { Updates } from "expo";
-import { Restart } from "fiction-expo-restart";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import Color from "./Color";
@@ -52,7 +52,7 @@ export default function Settings() {
             </View>
           </View>
         </ScrollView>
-
+        {/* 
         <TouchableOpacity
           style={styles.restart}
           onPress={() => {
@@ -64,7 +64,7 @@ export default function Settings() {
             name="ios-checkmark"
             style={{ ...styles.restartText, color: global.color }}
           ></Ionicons>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </SafeAreaView>
     </View>
   );
@@ -77,12 +77,12 @@ let styles = StyleSheet.create({
   tobBar: {
     flex: 0.1,
     borderBottomWidth: 1,
-
+    justifyContent: "center",
     backgroundColor: "#fefefe",
   },
   tobBarText: {
     left: 15,
-    bottom: 0,
+    top: 15,
     opacity: 0.6,
     fontSize: 26,
     color: "#191919",
