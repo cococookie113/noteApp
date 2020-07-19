@@ -3217,6 +3217,11 @@ fbjs@^0.8.4, fbjs@^0.8.9:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.18"
 
+fiction-expo-restart@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/fiction-expo-restart/-/fiction-expo-restart-1.0.4.tgz#8533525c846d60436d1495154215e4a42c662192"
+  integrity sha512-xcNtlDjcfpPZC+AhtmVY3LeaKvVuGbLJZeiWSvvhMRIsbq2l+HjH323plSI6pn8ePFXhbPpjSWJT8Lmi2qUC9w==
+
 figures@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
@@ -5129,6 +5134,11 @@ react-native-prompt@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-prompt/-/react-native-prompt-1.0.0.tgz#41e0ec2aa7dd8f12f3a3ee83af9d63c4b670f8a1"
   integrity sha1-QeDsKqfdjxLzo+6Dr51jxLZw+KE=
+
+react-native-restart@0.0.17:
+  version "0.0.17"
+  resolved "https://registry.yarnpkg.com/react-native-restart/-/react-native-restart-0.0.17.tgz#c1f38e019d1a2114248d496698e7951e9435ba91"
+  integrity sha512-UwFPDssMFoyDbF2aLARIHWt5g/o0TtxCXK9WIY+0iNpkgG9qWd+n80XBwXioNCdgy39ZQ5yfJBJRwtMLDgABag==
 
 react-native-safe-area-context@~3.0.7:
   version "3.0.7"

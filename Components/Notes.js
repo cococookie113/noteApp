@@ -24,10 +24,9 @@ import {
 } from "./storage";
 
 global.noteList = {};
-global.color = "#30D0B7";
 
-const NOTELIST_KEY = "_noteList";
-const COLOR_KEY = "_color";
+const NOTELIST_KEY = "noteList";
+const COLOR_KEY = "color";
 
 export default class Notes extends Component {
   constructor(props) {
@@ -35,13 +34,34 @@ export default class Notes extends Component {
     this.state = {
       promptVisible: false,
 
-      noteList: global.noteList,
-      renderedMap: global.notelist,
+      noteList: {},
     };
+    // getData(NOTELIST_KEY)
+    //   .then((value) => {
+    //     if (value) {
+    //       this.state.noteList = value;
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+
+    // getData(COLOR_KEY)
+    //   .then((value) => {
+    //     if (value) {
+    //       global.color = value;
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+  }
+
+  UNSAFE_componentWillMount() {
     getData(NOTELIST_KEY)
       .then((value) => {
         if (value) {
-          global.noteList = value;
+          this.setState({ noteList: value });
         }
       })
       .catch((err) => {
@@ -54,11 +74,11 @@ export default class Notes extends Component {
 
     return (
       <SafeAreaView style={styles.mainContainer}>
-        <View style={styles.dropZone}>
-          <Text style={styles.text}>Delete</Text>
+        <View style={{ ...styles.dropZone, backgroundColor: global.color }}>
+          <Text style={styles.text}></Text>
         </View>
         <View style={styles.noteContainer}>
-          {makeArr(global.noteList).map((note) => {
+          {makeArr(this.state.noteList).map((note) => {
             return (
               <Draggable
                 key={note.word}
@@ -74,7 +94,8 @@ export default class Notes extends Component {
                   // console.log(gesture.moveY);
                   if (gesture.moveY < Window.height / 10 + CIRCLE_RADIUS / 3) {
                     // console.log("hi");
-                    deleteFromNoteList(note.word);
+                    delete this.state.noteList[note.word];
+                    storeData(NOTELIST_KEY, this.state.noteList);
                     this.setState({});
                   }
                 }}
@@ -83,22 +104,28 @@ export default class Notes extends Component {
           })}
         </View>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.refresh}
           onPress={() => {
-            storeData(NOTELIST_KEY, global.noteList);
+            storeData(NOTELIST_KEY, this.state.noteList);
             this.setState({});
           }}
         >
-          <Ionicons name="ios-refresh" style={styles.refreshText}></Ionicons>
-        </TouchableOpacity>
+          <Ionicons
+            name="ios-refresh"
+            style={{ ...styles.refreshText, color: global.color }}
+          ></Ionicons>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.addNote}
           onPress={() => {
             this.setState({ promptVisible: true });
           }}
         >
-          <Ionicons name="ios-add" style={styles.addText}></Ionicons>
+          <Ionicons
+            name="ios-add"
+            style={{ ...styles.addText, color: global.color }}
+          ></Ionicons>
         </TouchableOpacity>
 
         <Prompt
@@ -110,7 +137,8 @@ export default class Notes extends Component {
           onCancel={() => this.setState({ promptVisible: false })}
           onSubmit={(value, valueSecond) => {
             if (value !== "") {
-              addInNoteList(value, valueSecond);
+              //addInNoteList(value, valueSecond);
+
               // global.noteList.set(
               //   value,
               //   new Map([
@@ -118,8 +146,12 @@ export default class Notes extends Component {
               //     ["details", valueSecond],
               //   ])
               // );
+              this.state.noteList[value] = {
+                word: value,
+                details: valueSecond,
+              };
             }
-            storeData(NOTELIST_KEY, global.noteList).catch((err) => {
+            storeData(NOTELIST_KEY, this.state.noteList).catch((err) => {
               console.log(err);
             });
             this.setState({ promptVisible: false });
@@ -153,7 +185,6 @@ let styles = StyleSheet.create({
     flex: 0.12,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#2c3e50",
   },
   noteContainer: {
     flex: 0.88,
@@ -170,9 +201,9 @@ let styles = StyleSheet.create({
 
   addNote: {
     position: "absolute",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 74,
+    height: 74,
+    borderRadius: 37,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F8F8F8",
@@ -191,7 +222,6 @@ let styles = StyleSheet.create({
   },
   addText: {
     fontSize: 60,
-    color: "#30D0B7",
   },
   refresh: {
     position: "absolute",
@@ -216,6 +246,5 @@ let styles = StyleSheet.create({
   },
   refreshText: {
     fontSize: 40,
-    color: "#30D0B7",
   },
 });
