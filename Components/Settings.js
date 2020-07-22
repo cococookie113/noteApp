@@ -35,6 +35,7 @@ export default function Settings() {
       </View>
       <SafeAreaView style={styles.container}>
         <ScrollView>
+          <View></View>
           <View style={styles.item}>
             <View
               style={{
@@ -51,6 +52,7 @@ export default function Settings() {
               })}
             </View>
           </View>
+          <View></View>
         </ScrollView>
         {/* 
         <TouchableOpacity
