@@ -2,11 +2,11 @@
   "expo": {
     "name": "AmeuMemo",
     "slug": "AmeuMemo",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "android": {
-      "softwareKeyboardLayoutMode": "pan"
+      "package": "com.cococookie113.AmeuMemo"
     },
     "splash": {
       "image": "./assets/splash.png",
@@ -16,9 +16,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

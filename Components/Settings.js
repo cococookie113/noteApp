@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Updates } from "expo";
-import { Restart } from "fiction-expo-restart";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -104,7 +103,7 @@ export default function Settings() {
           <View></View>
         </ScrollView>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.restart}
           onPress={() => {
             // Updates.reload();
@@ -115,7 +114,7 @@ export default function Settings() {
             name="ios-checkmark"
             style={{ ...styles.restartText, color: global.color }}
           ></Ionicons>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </SafeAreaView>
     </View>
   );
